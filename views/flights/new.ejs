@@ -10,11 +10,11 @@
         <input type="text" name="flightNo">
     </label><br>
     <label>Departs:
-        <input type="text" name="airport">
+        <input type="datetime-local" name="departs">
     </label><br> 
     <button type="submit">Add Flight</button>
 </form>
 <p>
-
+<%= errorMsg %>
 </p>
 <%- include('../partials/footer') %>

@@ -8,19 +8,22 @@ module.exports = {
 
 async function index(req, res) {
     const flights = await Flight.find({});
-    res.render('flights/index',  { flights });
+    res.render('flights/index',  { title: 'All of your flights', flights });
 }
 
 function newFlight(req, res) {
-    res.render('flights/new', {title: 'Add a flight', errorMsg: ''});
+    res.render('flights/new', { title: 'Add a flight', errorMsg: '' });
 }
 
 async function create(req, res) {
-    try {
-        await Flight.create(req.boduy);
-        res.redirect('/flights/new');
-    } catch (err) {
-        console.log(error);
-        res.render('flights/new', {errorMsg: error.message})
+    for (let key in req.body) {
+      if (req.body[key] === '') delete req.body[key]
     }
-}
+    try {
+      await Flight.create(req.body);
+      res.redirect('/flights/new');
+    } catch (err) {
+      console.log(err);
+      res.render('flights/new', { errorMsg: error.message })
+    }
+  }
