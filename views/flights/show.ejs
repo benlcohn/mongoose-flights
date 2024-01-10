@@ -1,18 +1,67 @@
-<%- include('..partials/header') %>
+<%- include('../partials/header') %>
+  <br>
+  <h2>Departing From</h2>
+  <section id="show-page">
+    <div>Airline: </div>
+    <div>
+      <%= flight.airline %>
+    </div>
+    <div>Airport: </div>
+    <div>
+      <%= flight.airport %>
+    </div>
+    <div>Flight Number: </div>
+    <div>
+      <%= flight.flightNo %>
+    </div>
+    <div>Departure Time: </div>
+    <div>
+      <%= flight.departs.toLocaleDateString() %>
+        <%= flight.departs.toLocaleTimeString().replace(':00', '' ) %>
+    </div>
+  </section>
 
-<section>
-    <div>
-        <%= flight.airline %>
-    </div>
-    <div>
-        <%= flight.airport %>
-    </div>
-    <div>
-        <%= flight.flightNo %>
-    </div>
-    <div>
-        <%= flight.departs %>
-    </div>
-</section>
+  <br>
+  <h2>Destination</h2>
+  <form id="add-destination-form" method="POST" action="/flights/<%= flight._id %>/destinations">
+    <label>Destination Airport:</label>
+    <select name="airport">
+      <% airports.forEach(function(airport) { %>
+        <option value="<%= airport %>">
+          <%= airport %>
+        </option>
+        <% }) %>
+    </select>
+    <label>Arrival:</label>
+    <input type="datetime-local" name="arrival">
+    <button type="submit">Add Destination</button>
+  </form>
 
-<%- include('..partials/footer') %>
+  <% if (flight.destinations.length) { %>
+    <table>
+      <thead>
+        <tr>
+          <th>Destination</th>
+          <th>Arrival Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% flight.destinations.forEach(function(f) { %>
+          <tr <% if (f.arrival < new Date()) {%> style="color: red" <% } %>>
+              <td>
+                <%= f.airport %>
+              </td>
+              <td>
+                <%= f.arrival.toLocaleDateString() %>
+                  <%= f.arrival.toLocaleTimeString().replace(':00', '' ) %>
+              </td>
+          </tr>
+          <% }); %>
+      </tbody>
+    </table>
+    <% } else { %>
+      <h5>No Destinations Added</h5>
+      <% } %>
+
+
+        <%- include('../partials/footer') %>

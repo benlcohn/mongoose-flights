@@ -33,3 +33,14 @@ async function create(req, res) {
     const flight = await Flight.findById(req.param.id);
     res.render('flights/show', { title: 'Flight Details', flight });
   }
+
+  async function show(req, res) {
+    const flight = await Flight.findById(req.params.id);
+    const airports = ["DEN", "DFW", "JFK", "LAX", "SEA", "SFO"].filter(airport => {
+      if (flight.airport.includes(airport) || flight.destinations.some((destinations) => destinations.airport === airport)) {
+        return false;
+      }
+      return true;
+    });
+    res.render('flights/show', { title: 'Flight Details', flight, airports });
+  }
