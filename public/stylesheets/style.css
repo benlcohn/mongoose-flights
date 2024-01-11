@@ -1,8 +1,70 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 20px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #ffffff;
+  color: #000000;
+}
+
+*:hover {
+  cursor: default;
+}
+
+th {
+  background-color: #8d8d8d;
+  padding-right: 50px;
 }
 
 a {
   color: #00B7FF;
+}
+
+a:hover {
+  cursor: pointer;
+}
+
+#new-form {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(2, minmax(auto, 10rem));
+}
+
+#new-form * {
+  font-size: 20px;
+  padding: .5rem;
+  border-radius: .5rem;
+}
+
+#new-form select {
+  margin-left: auto;
+}
+
+button {
+  border-radius: .5rem;
+  background-color: #bbbbbb;
+  color: #000000;
+  grid-column: span 2;
+  width: 5rem;
+  margin-left: auto;
+}
+
+#show-page {
+  display: grid;
+  grid-template-columns: auto auto;
+}
+
+
+#add-destination-form {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 1rem;
+}
+
+#add-destination-form button {
+  width: 6rem;
+  grid-column-start: 2;
+  margin-left: 0;
+}
+
+#add-destination-form input,
+#add-destination-form select {
+  margin-right: auto;
 }

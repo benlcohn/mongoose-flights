@@ -1,7 +1,4 @@
 <%- include('../partials/header') %>
-  <h2>
-    <%= title %>
-  </h2>
   <table>
     <thead>
       <tr>
@@ -12,16 +9,16 @@
       </tr>
     </thead>
     <tbody>
-      <% flights.forEach(function(fn) { %>
+      <% flights.forEach(function(f) { %>
         <tr>
-          <td><%= fn.airline %></td>
-          <td><%= fn.airport %></td>
-          <td><%= fn.flightNo %></td>
+          <td><%= f.airline %></td>
+          <td><%= f.airport %></td>
+          <td><%= f.flightNo %></td>
           <td>
-            <%= fn.departs.toLocaleString() %>
+            <%= f.departs.toLocaleString() %>
             <%= f.departs.toLocaleTimeString().replace(':00', '' ) %>
           </td>
-          <td><a href="/flights/<%= fn._id %>">Flight Details</a></td>
+          <td><a href="/flights/<%= f._id %>">Flight Details</a></td>
         </tr>
      <% }); %>
     </tbody>

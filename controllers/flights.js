@@ -1,46 +1,49 @@
-const Flight = require('../models/flight')
+const Flight = require('../models/flight');
+const Ticket = require('../models/ticket');
 
 module.exports = {
-    index,
-    new: newFlight,
-    create,
-    show,
+  index,
+  new: newFlight,
+  create,
+  show,
 }
 
 async function index(req, res) {
-    const flights = await Flight.find({});
-    res.render('flights/index',  { title: 'All of your flights', flights });
+  const flights = await Flight.find({});
+  const sortedFlights = flights.sort((a, b) => new Date(a.departs) - new Date(b.departs));
+  res.render('flights/index', { title: 'Flight List', flights: sortedFlights });
 }
 
 function newFlight(req, res) {
-    res.render('flights/new', { title: 'Add a flight', errorMsg: '' });
+  const newFlight = new Flight();
+  // Obtain the default date
+  const dt = newFlight.departs;
+  let departsDate = `${dt.getFullYear() - 1}-${(dt.getMonth() + 1).toString().padStart(2, '0')}`;
+  departsDate += `-${dt.getDate().toString().padStart(2, '0')}T${dt.toTimeString().slice(0, 5)}`;
+  res.render('flights/new', { departsDate, title: 'Add a New Flight', errorMsg: '' });
 }
 
 async function create(req, res) {
-    for (let key in req.body) {
-      if (req.body[key] === '') delete req.body[key]
-    }
-    try {
-      await Flight.create(req.body);
-      res.redirect('/flights/new');
-    } catch (err) {
-      console.log(err);
-      res.render('flights/new', { errorMsg: error.message })
-    }
+  for (let key in req.body) {
+    if (req.body[key] === '') delete req.body[key]
   }
+  try {
+    await Flight.create(req.body);
+    res.redirect('/flights/new');
+  } catch (err) {
+    console.log(err);
+    res.render('flights/new', { errorMsg: error.message });
+  }
+}
 
-  async function show(req, res) {
-    const flight = await Flight.findById(req.param.id);
-    res.render('flights/show', { title: 'Flight Details', flight });
-  }
-
-  async function show(req, res) {
-    const flight = await Flight.findById(req.params.id);
-    const airports = ["DEN", "DFW", "JFK", "LAX", "SEA", "SFO"].filter(airport => {
-      if (flight.airport.includes(airport) || flight.destinations.some((destinations) => destinations.airport === airport)) {
-        return false;
-      }
-      return true;
-    });
-    res.render('flights/show', { title: 'Flight Details', flight, airports });
-  }
+async function show(req, res) {
+  const flight = await Flight.findById(req.params.id);
+  const tickets = await Ticket.find({ flight: flight._id });
+  const airports = ["DEN", "DFW", "JFK", "LAX", "SEA", "SFO"].filter(airport => {
+    if (flight.airport.includes(airport) || flight.destinations.some((destinations) => destinations.airport === airport)) {
+      return false;
+    }
+    return true;
+  });
+  res.render('flights/show', { title: 'Flight Details', flight, airports, tickets });
+}

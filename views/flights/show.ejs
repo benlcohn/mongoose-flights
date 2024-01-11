@@ -22,7 +22,41 @@
   </section>
 
   <br>
-  <h2>Destination</h2>
+  <section>
+    <h2>Tickets</h2>
+    <% if (tickets.length) { %>
+      <table>
+        <thead>
+          <tr>
+            <th>Seat</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% tickets.forEach(function(t) { %>
+            <td>
+              <%= t.seat %>
+            </td>
+            <td>
+              $<%= t.price %>
+            </td>
+            <td>
+              <form action="/flights/<%= flight._id %>" method="POST">
+                <button type="submit">Delete Ticket</button>
+              </form>
+            </td>
+            </tr>
+            <% }); %>
+        </tbody>
+      </table>
+      <% } else { %>
+        <h5>No Tickets Yet</h5>
+        <% } %>
+          <a href="/flights/<%= flight._id %>/tickets/new"><button>New Ticket</button></a>
+  </section>
+
+  <br>
+  <h2>Destinations</h2>
   <form id="add-destination-form" method="POST" action="/flights/<%= flight._id %>/destinations">
     <label>Destination Airport:</label>
     <select name="airport">
@@ -46,14 +80,14 @@
         </tr>
       </thead>
       <tbody>
-        <% flight.destinations.forEach(function(f) { %>
-          <tr <% if (f.arrival < new Date()) {%> style="color: red" <% } %>>
+        <% flight.destinations.forEach(function(d) { %>
+          <tr <% if (d.arrival < new Date()) {%> style="color: red" <% } %>>
               <td>
-                <%= f.airport %>
+                <%= d.airport %>
               </td>
               <td>
-                <%= f.arrival.toLocaleDateString() %>
-                  <%= f.arrival.toLocaleTimeString().replace(':00', '' ) %>
+                <%= d.arrival.toLocaleDateString() %>
+                  <%= d.arrival.toLocaleTimeString().replace(':00', '' ) %>
               </td>
           </tr>
           <% }); %>
